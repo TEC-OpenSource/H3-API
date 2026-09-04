@@ -1,0 +1,31 @@
+services:
+  h3-api:
+    image: h3:1.0.0
+    pull_policy: never
+
+    container_name: h3-api
+    restart: unless-stopped
+
+    ports:
+      - "8137:8000"
+
+    read_only: true
+
+    tmpfs:
+      - /tmp
+
+    security_opt:
+      - no-new-privileges:true
+
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; req=urllib.request.Request('http://127.0.0.1:8000/health', method='POST'); urllib.request.urlopen(req)"
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
