@@ -1,6 +1,6 @@
 services:
   h3-api:
-    image: h3:1.0.0
+    image: h3:1.0.1
     pull_policy: never
 
     container_name: h3-api
