@@ -14,6 +14,11 @@ H3 라이브러리를 이용한 H3 변환 API 서버
   - Java `latLngToCellAddress()` 대응
   - 결과는 H3 hexadecimal String으로 반환
 
+- **`POST /cellToLatLng`**
+  - H3 Cell을 해당 Cell의 중심 위도, 경도로 변환
+  - Java `cellToLatLng()` 대응
+  - Decimal H3 Index와 H3 Address 모두 지원
+
 - **`POST /gridDisk`**
   - 기준 H3 Cell과 `k` 값으로 주변 Cell 조회
   - Decimal H3 Index와 H3 Address 모두 지원
@@ -134,6 +139,38 @@ Response:
       "reqRes": "9",
       "resLat": "37.5665",
       "resLng": "126.9780",
+      "resCell": "8930e1..."
+    }
+  ]
+}
+```
+
+### cellToLatLng
+
+```http
+POST /cellToLatLng
+Content-Type: application/json
+```
+
+```json
+{
+  "items": [
+    {
+      "reqCell": "8930e1..."
+    }
+  ]
+}
+```
+
+Response:
+
+```json
+{
+  "items": [
+    {
+      "reqCell": "8930e1...",
+      "resLat": "37.566...",
+      "resLng": "126.978...",
       "resCell": "8930e1..."
     }
   ]

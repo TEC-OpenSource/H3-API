@@ -24,10 +24,8 @@ class H3Data(BaseModel):
     resCount: str = "0"
     resCell: str = ""
 
-
 class H3Request(BaseModel):
     items: list[H3Data]
-
 
 def create_response(req: H3Data) -> dict:
     return {
@@ -43,7 +41,6 @@ def create_response(req: H3Data) -> dict:
         "resCount": "0",
         "resCell": req.reqCell
     }
-
 
 @app.post("/health")
 def health():
@@ -82,7 +79,6 @@ def latLngToCell(request: H3Request):
     return {
         "items": results
     }
-
 
 @app.post("/latLngToCellAddress")
 def latLngToCellAddress(request: H3Request):
@@ -161,6 +157,37 @@ def gridDisk(request: H3Request):
                     result["resCell"] = h3.int_to_str(cell)
 
                 results.append(result)
+
+        except Exception as e:
+            raise HTTPException(
+                status_code=400,
+                detail=str(e)
+            )
+
+    return {
+        "items": results
+    }
+
+@app.post("/cellToLatLng")
+def cellToLatLng(request: H3Request):
+    results = []
+
+    for req in request.items:
+        try:
+            cell_int, _ = parse_h3_cell(
+                req.reqCell
+            )
+
+            lat, lng = h3_int.cell_to_latlng(
+                cell_int
+            )
+
+            result = create_response(req)
+
+            result["resLat"] = str(lat)
+            result["resLng"] = str(lng)
+
+            results.append(result)
 
         except Exception as e:
             raise HTTPException(
